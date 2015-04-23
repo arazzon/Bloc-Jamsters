@@ -116,6 +116,7 @@ require("./landing");
 
     $('.selling-points .point').hover(onHoverAction, offHoverAction);
   });
+
 });
 
 ;
