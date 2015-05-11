@@ -181,122 +181,87 @@ if (document.URL.match(/\/album.html/)) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// This 'if' condition is used to prevent the jQuery modifications
- // from happening on non-Album view pages.
- //  - Use a regex to validate that the url has "/album" in its path.
- if (document.URL.match(/\/album.html/)) {
-   // Wait until the HTML is fully processed.
-   $(document).ready(function() {
-	var album = albumPicasso;
-
-   // Update the album title
-   var $albumTitle = $('.album-title');
-   $albumTitle.text(album.name);
-
-   // Update the album artist
-   var $albumArtist = $('.album-artist');
-   $albumArtist.text(album.artist);
-
-   // Update the meta information
-   var $albumMeta = $('.album-meta-info');
-   $albumMeta.text(album.year + " on " + album.label);
-
-   // Update the album image
-   var $albumImage = $('.album-image img');
-   $albumImage.attr('src', album.albumArtUrl);
-
-   // Update the Song List
-   var $songList = $(".album-song-listing");
-   $songList.empty();
-   var songs = album.songs;
-   for (var i = 0; i < songs.length; i++) {
-     var songData = songs[i];
-     var $newRow = createSongRow(i + 1, songData.name, songData.length);
-     $songList.append($newRow);
-   }
-
-       });
- }
 });
 
 ;require.register("scripts/app", function(exports, require, module) {
 
 require("./landing");
-
- require('./collection');
-
+require('./collection');
  require('./album');
-
 });
 
 ;require.register("scripts/collection", function(exports, require, module) {
 
+
 var buildAlbumThumbnail = function() {
-    var template =
-        '<div class="collection-album-container col-md-2">'
-      + '  <img src="/images/album-placeholder.png"/>'
-      + '  <div class="caption album-collection-info">'
-      + '    <p>'
-      + '      <a class="album-name" href="/album.html"> Album Name </a>'
-      + '      <br/>'
-      + '      <a href="/album.html"> Artist name </a>'
-      + '      <br/>'
-      + '      X songs'
-      + '      <br/>'
-      + '    </p>'
-      + '  </div>'
-      + '</div>';
+	var template =
+	  '<div class="collection-album-container col-md-2">'
+	+ '		<div class="collection-album-image-container">'
+	+ '			<img src="/images/album-placeholder.png">'
+	+ '		</div>'
+	+ '		<div class="caption album-collection-info">'
+	+ '			<p>'
+	+ '				<a class="album-name" href="/album.html">Album Name</a>'
+	+ '				<br />'
+	+ '				<a href="/album.html">Artist name</a>'
+	+ '				<br />'
+	+ '				X songs'
+	+ '				<br/>'
+	+ '			</p>'
+	+ '		</div>'
+	+ '	</div>';
 
-   return $(template);
- };
+	return $(template);
+};
 
-    var updateCollectionView = function() {
-    var $collection = $(".collection-container .row");
-    $collection.empty();
+var buildAlbumOverlay = function(albumURL) {
+	var template =
+			'<div class="collection-album-image-overlay">'
+		+	' <div class="collection-overlay-content">'
+		+	'   <a class="collection-overlay-button" href="' + albumURL + '">'
+		+	'    <i class="fa fa-play"></i>'
+		+	'   </a>'
+		+	'		&nbsp;'
+		+ '   <a class="collection-overlay-button">'
+		+ '			<i class="fa fa-plus"></i>'
+		+ '   </a>'
+		+	' </div>'
+		+	'</div>';
 
-    for (var i = 0; i < 33; i++) {
-    var $newThumbnail = buildAlbumThumbnail();
-    $collection.append($newThumbnail);
-    }
- };
+	return $(template);
+};
 
-	if (document.URL.match(/\/collection.html/)) {
-	   // Wait until the HTML is fully processed.
+var updateCollectionView = function() {
+	var $collection = $('.collection-container .row');
+	$collection.empty();
 
+	var albumAmount = Math.floor((Math.random() * (100 - 25)) + 25);
+	console.log("Number of albums:" + albumAmount);
+
+
+	for (var i = 0; i < albumAmount; i++) {
+		var $newThumbnail = buildAlbumThumbnail();
+		$collection.append($newThumbnail);
+	}
+
+	var onHover = function(event) {
+		$(this).append(buildAlbumOverlay('/album.html'));
+	};
+
+	var offHover = function(event) {
+		$(this).find('.collection-album-image-overlay').remove();
+	};
+
+	$collection.find('.collection-album-image-container').hover(onHover, offHover);
+};
+
+if (document.URL.match(/\/collection.html/)) {
+	//Wait until HTML is fully processed
 	$(document).ready(function() {
-        updateCollectionView();
-    });
+		updateCollectionView();
+	});
+}
 
- }
 });
 
 ;require.register("scripts/landing", function(exports, require, module) {
@@ -320,6 +285,7 @@ $(document).ready(function() {
     $('.selling-points .point').hover(onHoverAction, offHoverAction);
 
 });
+
 });
 
 ;
