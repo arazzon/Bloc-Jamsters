@@ -1,5 +1,6 @@
 
-$button-pink: #d2287b
+$button-pink: #d2287b;
+$font-base: 16px;
 
 .album-header-container {
   margin-top: 55px;
@@ -17,17 +18,17 @@ $button-pink: #d2287b
   }
 
   h3 {
-    font-size: 48px;
+    font-size: $font-base * 3;
     font-weight: 300;
   }
 
   h4 {
-    font-size: 24px;
+    font-size: $font-base * 1.5;
     font-weight: 700;
   }
 
   h5 {
-    font-size: 16px;
+    font-size: $font-base;
     font-weight: 500;
   }
 }
