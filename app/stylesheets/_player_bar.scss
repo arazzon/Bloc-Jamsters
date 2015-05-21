@@ -1,6 +1,4 @@
 
-@mixin width-align ($width, $text-align)
-
 .player-bar {
    position: fixed;
    bottom: 0;
@@ -23,11 +21,13 @@
 	 }
 
 	.left-controls {
-		 @include width-align (25%, left);
+		width: 25%;
+		text-align: left;
 	}
 
 	.right-controls {
-	  	 @include width-align (25%, left);
+	   width: 25%;
+	   text-align: right;
 	 }
 
  .play-controls {
@@ -52,10 +52,11 @@
    position: relative;
 
    .song-name, .artist-name {
-	   @include width-align (25%, left);
+	   text-align: center;
 	   font-size: 12px;
 	   margin: 0;
 	   position: absolute;
+	   width: 100%;
 	   font-weight: 300;
    }
 
