@@ -159,9 +159,13 @@ var changeAlbumView = function(album) {
 	  });
  };
 
+
+
 // This 'if' condition is used to prevent the jQuery modifications
 // from happening on non-Album view pages.
 //  - Use a regex to validate that the url has "/album" in its path.
+
+
 
 if (document.URL.match(/\/album.html/)) {
  // Wait until the HTML is fully processed.
@@ -172,6 +176,7 @@ if (document.URL.match(/\/album.html/)) {
 	    setupSeekBars();
     });
 }
+
 
 
 
