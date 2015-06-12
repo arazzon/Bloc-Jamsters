@@ -4,7 +4,13 @@
 //require('./profile');
 
  angular.module('BlocJams', []).controller('Landing.controller', ['$scope', function($scope) {
-  $scope.subText = "Turn the music up!";
+
+  $scope.titleText = "Bloc Jamsters";
+  $scope.subText = "Turn the music up!!";
+
+  $scope.titleTextClicked = function() {
+     $scope.titleText += '!';
+   };
 
    $scope.subTextClicked = function() {
      $scope.subText += '!';
@@ -21,4 +27,6 @@
      '/images/album-placeholders/album-8.jpg',
      '/images/album-placeholders/album-9.jpg',
    ];
+
+
  }]);

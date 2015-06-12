@@ -5,7 +5,7 @@ $(document).ready(function() {
       $(this).text(subText + "!");
     });
 
-	var onHoverAction = function(event) {
+ var onHoverAction = function(event) {
      console.log('Hover action triggered.');
      $(this).animate({'margin-top': '10px'});
     };
