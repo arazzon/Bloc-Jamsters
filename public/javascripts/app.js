@@ -212,44 +212,44 @@ var changeAlbumView = function(album) {
 
  };
 
-   var updateSeekPercentage = function($seekBar, event) {
-     var barWidth = $seekBar.width();
-     var offsetX = event.pageX - $seekBar.offset().left;
+	 var updateSeekPercentage = function($seekBar, event) {
+	   var barWidth = $seekBar.width();
+	   var offsetX = event.pageX - $seekBar.offset().left;
 
-     var offsetXPercent = (offsetX  / barWidth) * 100;
-     offsetXPercent = Math.max(0, offsetXPercent);
-     offsetXPercent = Math.min(100, offsetXPercent);
+	   var offsetXPercent = (offsetX  / barWidth) * 100;
+	   offsetXPercent = Math.max(0, offsetXPercent);
+	   offsetXPercent = Math.min(100, offsetXPercent);
 
-     var percentageString = offsetXPercent + '%';
-     $seekBar.find('.fill').width(percentageString);
-     $seekBar.find('.thumb').css({left: percentageString});
-   }
+	   var percentageString = offsetXPercent + '%';
+	   $seekBar.find('.fill').width(percentageString);
+	   $seekBar.find('.thumb').css({left: percentageString});
+	 }
 
-   var setupSeekBars = function() {
+	 var setupSeekBars = function() {
 
-     $seekBars = $('.player-bar .seek-bar');
-     $seekBars.click(function(event) {
-     updateSeekPercentage($(this), event);
-     });
+	   $seekBars = $('.player-bar .seek-bar');
+	   $seekBars.click(function(event) {
+	   updateSeekPercentage($(this), event);
+	   });
 
-     $seekBars.find('.thumb').mousedown(function(event){
-      var $seekBar = $(this).parent();
+	   $seekBars.find('.thumb').mousedown(function(event){
+	    var $seekBar = $(this).parent();
 
-     $seekBar.addClass('no-animate');
+	   $seekBar.addClass('no-animate');
 
-     $(document).bind('mousemove.thumb', function(event){
-        updateSeekPercentage($seekBar, event);
-      });
+	   $(document).bind('mousemove.thumb', function(event){
+	      updateSeekPercentage($seekBar, event);
+	    });
 
-      //cleanup
-      $(document).bind('mouseup.thumb', function(){
-      $seekBar.removeClass('no-animate');
+	    //cleanup
+	    $(document).bind('mouseup.thumb', function(){
+		  $seekBar.removeClass('no-animate');
 
-        $(document).unbind('mousemove.thumb');
-        $(document).unbind('mouseup.thumb');
-      });
+	      $(document).unbind('mousemove.thumb');
+	      $(document).unbind('mouseup.thumb');
+	    });
 
-    });
+	  });
  };
 
 
@@ -263,10 +263,10 @@ var changeAlbumView = function(album) {
 if (document.URL.match(/\/album.html/)) {
  // Wait until the HTML is fully processed.
 
-  $(document).ready(function() {
+	$(document).ready(function() {
 
-      changeAlbumView(albumPicasso);
-      setupSeekBars();
+	    changeAlbumView(albumPicasso);
+	    setupSeekBars();
     });
 }
 
@@ -282,14 +282,43 @@ if (document.URL.match(/\/album.html/)) {
 //require('./collection');
 //require('./profile');
 
- angular.module('BlocJams', []).controller('Landing.controller', ['$scope', function($scope) {
+blocJams = angular.module('BlocJams', ['ui.router']);
+
+blocJams.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
+   $locationProvider.html5Mode(true);
+
+   $stateProvider.state('landing', {
+     url: '/',
+     controller: 'Landing.controller',
+     templateUrl: '/templates/landing.html'
+   });
+
+  $stateProvider.state('song', {
+    url: '/song',
+    controller: 'Song.controller',
+    templateUrl: '/templates/song.html'
+  });
+
+ }]);
+
+ // This is a cleaner way to call the controller than crowding it on the module definition.
+ blocJams.controller('Landing.controller', ['$scope', function($scope) {
 
   $scope.titleText = "Bloc Jamsters";
-  $scope.subText = "Turn the music up!!";
+  $scope.subText = "Turn the music up!";
 
    $scope.subTextClicked = function() {
      $scope.subText += '!';
    };
+
+   var shuffle = function(o){ //v1.0
+     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+     return o;
+ };
+
+  $scope.titleTextClicked = function(){
+      shuffle($scope.albumURLs);
+    };
 
    $scope.albumURLs = [
      '/images/album-placeholders/album-1.jpg',
@@ -303,17 +332,9 @@ if (document.URL.match(/\/album.html/)) {
      '/images/album-placeholders/album-9.jpg',
    ];
 
-//extra challenge to make images shuffle when title is clicked
-function shuffle(o) {
-        for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-       return o;
-    };
-
-    $scope.titleTextClicked = function(o) {
-        shuffle($scope.albumURLs);
-    };
-
  }]);
+
+
 
 });
 
@@ -321,72 +342,72 @@ function shuffle(o) {
 
 
 var buildAlbumThumbnail = function() {
-  var template =
-    '<div class="collection-album-container col-md-2">'
-  + '		<div class="collection-album-image-container">'
-  + '			<img src="/images/album-placeholder.png">'
-  + '		</div>'
-  + '		<div class="caption album-collection-info">'
-  + '			<p>'
-  + '				<a class="album-name" href="/album.html">Album Name</a>'
-  + '				<br />'
-  + '				<a href="/album.html">Artist name</a>'
-  + '				<br />'
-  + '				X songs'
-  + '				<br/>'
-  + '			</p>'
-  + '		</div>'
-  + '	</div>';
+	var template =
+	  '<div class="collection-album-container col-md-2">'
+	+ '		<div class="collection-album-image-container">'
+	+ '			<img src="/images/album-placeholder.png">'
+	+ '		</div>'
+	+ '		<div class="caption album-collection-info">'
+	+ '			<p>'
+	+ '				<a class="album-name" href="/album.html">Album Name</a>'
+	+ '				<br />'
+	+ '				<a href="/album.html">Artist name</a>'
+	+ '				<br />'
+	+ '				X songs'
+	+ '				<br/>'
+	+ '			</p>'
+	+ '		</div>'
+	+ '	</div>';
 
-  return $(template);
+	return $(template);
 };
 
 var buildAlbumOverlay = function(albumURL) {
-  var template =
-      '<div class="collection-album-image-overlay">'
-    +	' <div class="collection-overlay-content">'
-    +	'   <a class="collection-overlay-button" href="' + albumURL + '">'
-    +	'    <i class="fa fa-play"></i>'
-    +	'   </a>'
-    +	'		&nbsp;'
-    + '   <a class="collection-overlay-button">'
-    + '			<i class="fa fa-plus"></i>'
-    + '   </a>'
-    +	' </div>'
-    +	'</div>';
+	var template =
+			'<div class="collection-album-image-overlay">'
+		+	' <div class="collection-overlay-content">'
+		+	'   <a class="collection-overlay-button" href="' + albumURL + '">'
+		+	'    <i class="fa fa-play"></i>'
+		+	'   </a>'
+		+	'		&nbsp;'
+		+ '   <a class="collection-overlay-button">'
+		+ '			<i class="fa fa-plus"></i>'
+		+ '   </a>'
+		+	' </div>'
+		+	'</div>';
 
-  return $(template);
+	return $(template);
 };
 
 var updateCollectionView = function() {
-  var $collection = $('.collection-container .row');
-  $collection.empty();
+	var $collection = $('.collection-container .row');
+	$collection.empty();
 
-  var albumAmount = Math.floor((Math.random() * (100 - 25)) + 25);
-  console.log("Number of albums:" + albumAmount);
+	var albumAmount = Math.floor((Math.random() * (100 - 25)) + 25);
+	console.log("Number of albums:" + albumAmount);
 
 
-  for (var i = 0; i < albumAmount; i++) {
-    var $newThumbnail = buildAlbumThumbnail();
-    $collection.append($newThumbnail);
-  }
+	for (var i = 0; i < albumAmount; i++) {
+		var $newThumbnail = buildAlbumThumbnail();
+		$collection.append($newThumbnail);
+	}
 
-  var onHover = function(event) {
-    $(this).append(buildAlbumOverlay('/album.html'));
-  };
+	var onHover = function(event) {
+		$(this).append(buildAlbumOverlay('/album.html'));
+	};
 
-  var offHover = function(event) {
-    $(this).find('.collection-album-image-overlay').remove();
-  };
+	var offHover = function(event) {
+		$(this).find('.collection-album-image-overlay').remove();
+	};
 
-  $collection.find('.collection-album-image-container').hover(onHover, offHover);
+	$collection.find('.collection-album-image-container').hover(onHover, offHover);
 };
 
 if (document.URL.match(/\/collection.html/)) {
-  //Wait until HTML is fully processed
-  $(document).ready(function() {
-    updateCollectionView();
-  });
+	//Wait until HTML is fully processed
+	$(document).ready(function() {
+		updateCollectionView();
+	});
 }
 
 });
