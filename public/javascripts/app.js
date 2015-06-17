@@ -305,9 +305,10 @@ blocJams.config(['$stateProvider', '$locationProvider', function($stateProvider,
  blocJams.controller('Landing.controller', ['$scope', function($scope) {
 
   $scope.titleText = "Bloc Jamsters";
+
   $scope.subText = "Turn the music up!";
 
-   $scope.subTextClicked = function() {
+  $scope.subTextClicked = function() {
      $scope.subText += '!';
    };
 
@@ -465,4 +466,5 @@ var selectedTabName = $tab.attr('href');
 });
 
 ;
+
 //# sourceMappingURL=app.js.map
