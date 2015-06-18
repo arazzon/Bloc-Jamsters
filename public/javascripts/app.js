@@ -282,6 +282,25 @@ if (document.URL.match(/\/album.html/)) {
 //require('./collection');
 //require('./profile');
 
+<<<<<<< HEAD
+blocJams = angular.module('BlocJams', ['ui.router']);
+
+blocJams.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
+   $locationProvider.html5Mode(true);
+
+   $stateProvider.state('landing', {
+     url: '/',
+     controller: 'Landing.controller',
+     templateUrl: '/templates/landing.html'
+   });
+ }]);
+
+ // This is a cleaner way to call the controller than crowding it on the module definition.
+ blocJams.controller('Landing.controller', ['$scope', function($scope) {
+
+  $scope.titleText = "Bloc Jamsters";
+  $scope.subText = "Turn the music up!";
+=======
  angular.module('BlocJams', []).controller('Landing.controller', ['$scope', function($scope) {
 
   $scope.titleText = "Bloc Jamsters";
@@ -290,11 +309,24 @@ if (document.URL.match(/\/album.html/)) {
   $scope.titleTextClicked = function() {
      $scope.titleText += '!';
    };
+>>>>>>> d6e6f9be2f2fe60045849f7b69d35bdaac0e0a1d
 
    $scope.subTextClicked = function() {
      $scope.subText += '!';
    };
 
+<<<<<<< HEAD
+   var shuffle = function(o){ //v1.0
+     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+     return o;
+ };
+
+  $scope.titleTextClicked = function(){
+      shuffle($scope.albumURLs);
+    };
+
+=======
+>>>>>>> d6e6f9be2f2fe60045849f7b69d35bdaac0e0a1d
    $scope.albumURLs = [
      '/images/album-placeholders/album-1.jpg',
      '/images/album-placeholders/album-2.jpg',
@@ -307,7 +339,10 @@ if (document.URL.match(/\/album.html/)) {
      '/images/album-placeholders/album-9.jpg',
    ];
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> d6e6f9be2f2fe60045849f7b69d35bdaac0e0a1d
  }]);
 
 });
