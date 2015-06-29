@@ -387,6 +387,7 @@ blocJams.controller('Album.controller', ['$scope', 'SongPlayer', function($scope
    };
 
   $scope.getSongState = function(song) {
+    
      if (song === SongPlayer.currentSong && SongPlayer.playing) {
        return 'playing';
      }
@@ -408,9 +409,11 @@ blocJams.controller('Album.controller', ['$scope', 'SongPlayer', function($scope
 
 blocJams.controller('PlayerBar.controller', ['$scope', 'SongPlayer', function($scope, SongPlayer) {
   $scope.songPlayer = SongPlayer;
+  var previousVolume = SongPlayer.volume;
 
   
    $scope.volumeClass = function() {
+     
      return {
        'fa-volume-off': SongPlayer.volume == 0,
        'fa-volume-down': SongPlayer.volume <= 70 && SongPlayer.volume > 0,
@@ -418,7 +421,20 @@ blocJams.controller('PlayerBar.controller', ['$scope', 'SongPlayer', function($s
      }
    }
 
+   $scope.volumeMute = function() {
+     
+    if(SongPlayer.volume == 0) {
+      SongPlayer.setVolume(previousVolume);
+
+    }
+    else {
+      previousVolume = SongPlayer.volume;
+      SongPlayer.setVolume(0);
+    }
+  }
+   
     SongPlayer.onTimeUpdate(function(event, time){
+      
      $scope.$apply(function(){
        $scope.playTime = time;
      });
@@ -433,6 +449,7 @@ blocJams.service('SongPlayer', ['$rootScope', function($rootScope) {
    };
 
    var setFowardButton = function(currentTrackIndex, albumLength){
+     
       if(currentTrackIndex === albumLength-1){
         return false;
       }
@@ -442,6 +459,7 @@ blocJams.service('SongPlayer', ['$rootScope', function($rootScope) {
    }
 
    var setBackwardButton = function(currentTrackIndex){
+     
       if (currentTrackIndex === 0) {
          return false;
       }
@@ -514,13 +532,31 @@ blocJams.service('SongPlayer', ['$rootScope', function($rootScope) {
     onTimeUpdate: function(callback) {
       return $rootScope.$on('sound:timeupdate', callback);
     },
+     
+      unmute: function() {
+        
+      if(currentSoundFile) {
+        currentSoundFile.unmute();
+      }
+      var currentVolume = currentSoundFile.getVolume();
+      this.setVolume(currentVolume);
+    },
+    getVolume: function() {
+      
+      if(currentSoundFile) {
+        currentSoundFile.getVolume();
+      }
+    },
+     
     setVolume: function(volume) {
+      
       if(currentSoundFile){
         currentSoundFile.setVolume(volume);
       }
       this.volume = volume;
     },
      setSong: function(album, song) {
+       
         if (currentSoundFile) {
           currentSoundFile.stop();
         }
@@ -533,6 +569,8 @@ blocJams.service('SongPlayer', ['$rootScope', function($rootScope) {
           preload: true
         });
 
+       currentSoundFile.setVolume(this.volume);
+       
        currentSoundFile.bind('timeupdate', function(e){
         $rootScope.$broadcast('sound:timeupdate', this.getTime());
        });
@@ -556,6 +594,7 @@ blocJams.directive('slider', ['$document', function($document){
    }
 
    var numberFromValue = function(value, defaultValue) {
+     
      if (typeof value === 'number') {
        return value;
      }
@@ -573,6 +612,7 @@ blocJams.directive('slider', ['$document', function($document){
      templateUrl: '/templates/directives/slider.html', // We'll create these files shortly.
      replace: true,
      restrict: 'E',
+     
      scope: {
       onChange: '&'
      },
@@ -615,6 +655,7 @@ blocJams.directive('slider', ['$document', function($document){
        }
 
        scope.trackThumb = function() {
+         
          $document.bind('mousemove.thumb', function(event){
            var percent = calculateSliderPercentFromMouseEvent($seekBar, event);
            scope.$apply(function(){
@@ -630,6 +671,7 @@ blocJams.directive('slider', ['$document', function($document){
        };
 
        var notifyCallback = function(newValue) {
+         
          if(typeof scope.onChange === 'function') {
            scope.onChange({value: newValue});
          }
@@ -639,6 +681,7 @@ blocJams.directive('slider', ['$document', function($document){
  }]);
 
 blocJams.filter('timecode', function(){
+  
    return function(seconds) {
      seconds = Number.parseFloat(seconds);
  
