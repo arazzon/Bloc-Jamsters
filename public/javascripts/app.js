@@ -312,7 +312,6 @@ blocJams.config(['$stateProvider', '$locationProvider', function($stateProvider,
 
    $stateProvider.state('song', {
      url: '/song',
-     controller: 'Landing.controller',
      templateUrl: '/templates/song.html'
    });
 
@@ -330,51 +329,49 @@ blocJams.config(['$stateProvider', '$locationProvider', function($stateProvider,
    });
  }]);
  
- // This is a cleaner way to call the controller than crowding it on the module definition.
- blocJams.controller('Landing.controller', ['$scope', function($scope) {
+blocJams.controller('Landing.controller', ['$scope', function($scope) {
+  $scope.titleText = "Bloc Jamsters";
   $scope.subText = "Turn the music up!";
-  $scope.headingText = "Bloc Jams"
 
   $scope.subTextClicked = function() {
     $scope.subText += '!';
   };
 
   $scope.albumURLs = [
-   '/images/album-placeholders/album-1.jpg',
-   '/images/album-placeholders/album-2.jpg',
-   '/images/album-placeholders/album-3.jpg',
-   '/images/album-placeholders/album-4.jpg',
-   '/images/album-placeholders/album-5.jpg',
-   '/images/album-placeholders/album-6.jpg',
-   '/images/album-placeholders/album-7.jpg',
-   '/images/album-placeholders/album-8.jpg',
-   '/images/album-placeholders/album-9.jpg',
-   ];
+    '/images/album-placeholders/album-1.jpg',
+    '/images/album-placeholders/album-2.jpg',
+    '/images/album-placeholders/album-3.jpg',
+    '/images/album-placeholders/album-4.jpg',
+    '/images/album-placeholders/album-5.jpg',
+    '/images/album-placeholders/album-6.jpg',
+    '/images/album-placeholders/album-7.jpg',
+    '/images/album-placeholders/album-8.jpg',
+    '/images/album-placeholders/album-9.jpg',
+  ];
 
-  
+  $scope.shuffle = function(o){ 
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+  };
 
-  $scope.headingClicked = function(){
-
-    function shuffle(o){ //v1.0
-      for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-      return o;
-    };
-
-    shuffle($scope.albumURLs);
-  }
-
+  $scope.titleTextClicked = function() {
+    $scope.shuffle($scope.albumURLs);
+  };
 }]);
 
 blocJams.controller('Collection.controller', ['$scope','SongPlayer', function($scope, SongPlayer) {
-   $scope.albums = [];
-   for (var i = 0; i < 33; i++) {
-     $scope.albums.push(angular.copy(albumPicasso));
-   }
-
-   $scope.playAlbum = function(album){
-     SongPlayer.setSong(album, album.songs[0]); // Targets first song in the array.
-   }
+  $scope.hideOverlay = true;
+  $scope.albums = [];
+ 
+  for (var i = 0; i < 33; i++) {
+    $scope.albums.push(angular.copy(albumPicasso));
+  } 
+  
+    $scope.playAlbum = function(album){
+    SongPlayer.setSong(album, album.songs[0]); // Targets first song in the array.
+    }
 }]);
+
 
 blocJams.controller('Album.controller', ['$scope', 'SongPlayer', function($scope, SongPlayer) {
    $scope.album = angular.copy(albumPicasso);
